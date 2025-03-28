@@ -1,0 +1,129 @@
+name: storage-node
+services:
+  fhir:
+    image: hapiproject/hapi:latest
+    container_name: fhir
+    volumes:
+      - ./hapi.application.yaml:/app/config/application.yaml
+      - ./hapi-extra-classes:/app/extra-classes
+    networks:
+      - storage_network
+    depends_on:
+      fhir-db:
+        condition: service_healthy
+
+  fhir-db:
+      image: postgres:alpine
+      container_name: fhir-db
+      environment:
+        POSTGRES_DB: ${FHIR_DB}
+        POSTGRES_USER: ${FHIR_USER}
+        POSTGRES_PASSWORD: ${FHIR_PASSWORD}
+        POSTGRES_INITDB_ARGS: "--data-checksums"
+      volumes:
+        - fhir-db:/var/lib/postgresql/data
+      networks:
+      - storage_network
+      healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U ${FHIR_USER} -d ${FHIR_DB}"]
+        interval: 5s
+        timeout: 2s
+        retries: 3
+  
+  fhir-db-backup:
+    image: offen/docker-volume-backup 
+    container_name: fhir-db-backup
+    environment:
+      BACKUP_FILENAME: "fhir-db_backup_%Y-%m-%d_%H-%M-%S.tar.gz"
+      BACKUP_CRON_EXPRESSION: "@daily" 
+      BACKUP_RETENTION_DAYS: 7  
+    volumes:
+      - fhir-db:/backup/source:ro  
+      - ./backups:/backup/destination  
+    networks:
+      - storage_network
+   
+  keycloak:
+    image: keycloak/keycloak:latest
+    container_name: keycloak
+    environment:
+      KC_PROXY: edge
+      KC_HOSTNAME: localhost
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://keycloak-db:5432/${KEYCLOAK_DB}
+      KC_DB_USERNAME: ${KEYCLOAK_USER}
+      KC_DB_PASSWORD: ${KEYCLOAK_PASSWORD}
+      KC_HEALTH_ENABLED: true
+      KC_METRICS_ENABLED: true
+    command:
+      - "start-dev"
+      - "--http-port=8080"
+      - "--https-port=8081"
+      - "--https-certificate-file=/etc/x509/https/cert.pem"
+      - "--https-certificate-key-file=/etc/x509/https/key.pem"
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./certs:/etc/x509/https:ro
+    networks:
+      - storage_network
+    depends_on:
+      keycloak-db:
+        condition: service_healthy
+  
+  keycloak-db:
+    image: postgres:alpine
+    container_name: keycloak-db
+    environment:
+      POSTGRES_DB: ${KEYCLOAK_DB}
+      POSTGRES_USER: ${KEYCLOAK_USER}
+      POSTGRES_PASSWORD: ${KEYCLOAK_PASSWORD}
+    volumes:
+      - keycloak-db:/var/lib/postgresql/data
+    networks:
+      - storage_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${KEYCLOAK_USER} -d ${KEYCLOAK_DB}"]
+      interval: 5s
+      timeout: 2s
+      retries: 3
+    
+  keycloak-db-backup:
+    image: offen/docker-volume-backup
+    container_name: keycloak-db-backup
+    environment:
+      BACKUP_FILENAME: "keycloak-db_backup_%Y-%m-%d_%H-%M-%S.tar.gz"
+      BACKUP_CRON_EXPRESSION: "@daily"
+      BACKUP_RETENTION_DAYS: 7
+    volumes:
+      - keycloak-db:/backup/source:ro
+      - ./backups:/backup/destination
+    networks:
+      - storage_network
+   
+  nginx:
+    container_name: nginx
+    image: nginx:alpine
+    ports:
+      - "80:80"   
+      - "443:443"  
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./certs:/etc/nginx/certs:ro
+    networks:
+      - storage_network
+    depends_on:
+      - fhir
+
+volumes:
+  keycloak-db:
+    name: keycloak-db
+    external: true #Solamente perché i secrets e gli utenti sono già stati configurati. Rimuovere questa riga per nuove installazioni
+  fhir-db:
+    name: fhir-db
+
+networks:
+  storage_network:
+

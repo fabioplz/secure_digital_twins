@@ -1,0 +1,53 @@
+name: visualization-node
+services:
+  resource-visualizator:
+    build:
+      context: ./resource-visualizator
+    container_name: resource-visualizator
+    networks:
+      - visualization-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "8082:5000"
+    environment:
+      KEYCLOAK_BASE_URL: ${KEYCLOAK_BASE_URL}
+      REALM: ${REALM}
+      VISUALIZATION_CLIENT_ID: ${VISUALIZATION_CLIENT_ID}
+      VISUALIZATION_CLIENT_SECRET: ${VISUALIZATION_CLIENT_SECRET}
+      FHIR_SERVER: ${FHIR_SERVER}
+  history-visualizator:
+    build:
+      context: ./history-visualizator
+    container_name: history-visualizator
+    networks:
+      - visualization-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "8083:5000"
+    environment:
+      KEYCLOAK_BASE_URL: ${KEYCLOAK_BASE_URL}
+      REALM: ${REALM}
+      VISUALIZATION_CLIENT_ID: ${VISUALIZATION_CLIENT_ID}
+      VISUALIZATION_CLIENT_SECRET: ${VISUALIZATION_CLIENT_SECRET}
+      FHIR_SERVER: ${FHIR_SERVER}
+  analysis-visualizator:
+    build:
+      context: ./analysis-visualizator
+    container_name: analysis-visualizator
+    networks:
+      - visualization-network
+    ports:
+      - "8084:8501"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      KAFKA_BROKER: ${KAFKA_BROKER}
+      KAFKA_TOPIC: ${KAFKA_TOPIC}
+      KAFKA_USERNAME: ${KAFKA_USERNAME}
+      KAFKA_PASSWORD: ${KAFKA_PASSWORD}
+      
+networks:
+  visualization-network:
+  
