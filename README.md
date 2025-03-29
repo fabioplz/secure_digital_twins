@@ -10,7 +10,7 @@ Digital Twins (DTs) are virtual replicas of physical systems that enable real-ti
 
 - **Ensures data protection** during transmission, storage, and use.
 - **Supports interoperability** through compliance with healthcare data standards such as FHIR/HL7.
-- **Enables real-time data processing** with a robust ETL pipeline.
+- **Enables real-time data processing** with a robust ET pipeline.
 - **Implements layered security measures** including encryption, access control, authentication, and anonymization.
 
 ---
@@ -57,8 +57,8 @@ The repository is organized into several directories and files that reflect the 
 - **analysis node**  
   Contains modules and scripts for data analysis related to digital twin operations. This includes algorithms and utilities to interpret the processed data.
 
-- **etl node**  
-  Houses the ETL (Extract, Transform, Load) components, including the data ingestion scripts, transformation services (such as the custom FHIR Standardizer), and associated utilities for data cleaning and standardization.
+- **ET node**  
+  Houses the ET (Extract, Transform) components, including the data ingestion scripts, transformation services (such as the custom FHIR Standardizer), and associated utilities for data cleaning and standardization.
 
 - **storage node**  
   Manages components responsible for secure data persistence. This includes the FHIR server implementation (using HAPI FHIR JPA Server), database configuration files, and scripts to enforce encryption and backup processes.
@@ -74,7 +74,7 @@ This structure not only reflects the logical separation of concerns but also mak
 
 The repository implements the above framework using a microservices architecture and containerization for modularity and scalability. Key technologies include:
 - **Java & Python:** Core languages for implementing the FHIR server, transformation service, and other microservices.
-- **Docker:** Containerization of services (e.g., ETL components, security proxies) to ensure isolated, reproducible environments.
+- **Docker:** Containerization of services (e.g., ET components, security proxies) to ensure isolated, reproducible environments.
 - **Apache Kafka:** Used for real-time data ingestion and inter-service communication.
 - **HAPI FHIR JPA Server & PostgreSQL:** Managing and storing healthcare data in FHIR/HL7 format.
 - **Nginx & Keycloak:** Acting as a reverse proxy for secure communication and managing authentication and authorization.
