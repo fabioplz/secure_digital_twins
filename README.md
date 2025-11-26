@@ -92,4 +92,4 @@ The framework has been evaluated in a case study for a **Digital Twin of a Mecha
 This case study validates the framework against the initial research questions on data standardization, interoperability, and comprehensive data security.
 
 ## How to install
-[How to install](installation_guide.md)
+Follow these [How to install](installation_guide.md) to install the architecture.

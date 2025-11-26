@@ -18,21 +18,20 @@ Before installing and running the system, ensure the following software is insta
    Verify installation:
 
    ```bash
+      docker run hello-world
    ```
 
-docker run hello-world
-
-````
-
 2. **Python & pip**
-
-3. **Java 23**
-
-4. **Maven**  
+   ```bash
+      python3 --version
+      pip3 --version
+   ```
+3. **Java 23 & maven**  
    Verify installation:  
    ```bash
-mvn --help
-````
+      java --version
+      mvn --version
+   ```
 
 > **Note:** Docker Desktop **must be running** whenever you use `docker` or `docker-compose`.
 
@@ -45,7 +44,7 @@ mvn --help
 Navigate to:
 
 ```
-et node/BREATHE/breathe.engine
+BREATHE/breathe.engine
 ```
 
 Install the Pulse library:
@@ -78,7 +77,7 @@ mvn clean install
 Inside:
 
 ```
-et node/BREATHE/breathe.web
+BREATHE/breathe.web
 ```
 
 Run:
@@ -87,11 +86,7 @@ Run:
 ./mvnw
 ```
 
-Then open your browser at:
-
-```
-http://localhost:8080
-```
+Then open your browser at `http://localhost:8080`
 
 Click:
 
@@ -118,7 +113,7 @@ This file should be placed in the frontend directory of the project (i.e., the w
 
 ### 3.1 Start Docker Services
 
-From the storage node directory:
+From the storage Node directory:
 
 ```bash
 docker-compose up -d
@@ -126,14 +121,9 @@ docker-compose up -d
 
 ### 3.2 Configure Keycloak Clients
 
-Open:
-
-```
-http://localhost:8080
-```
+Open: `https://localhost:8081`
 
 Login:
-
 * **Username:** admin
 * **Password:** admin
 
@@ -141,34 +131,27 @@ Create the following clients with settings below:
 * `upload-client`
 * `analytics-client`
 * `visualization-client`
-![Client Settings](images/client_setting.png)
+![Client Settings](client_setting.png)
 
-Copy the **client secrets** into `docker-compose.yml` (lines 7–9).
-
-### 3.3 Restart Containers
-
-```bash
-docker-compose down
-docker-compose up -d
-```
-
-### 3.4 Configure Realm Frontend URLs
+### 3.3 Configure Realm Frontend URLs
 
 Navigate to:
 **Configure → Realm Settings → General**
 
 Set frontend configuration as shown:
 
-![Realm Settings](images/realm_settings.png)
+![Realm Settings](realm_settings.png)
 
-### 3.5 Update `.env`
+### 3.4 Update `.env`
 
 Insert the generated Keycloak credentials into the `.env` file.
 
-### 3.6 Verify FHIR Node
+### 3.5 Restart Containers
 
-Ensure the **FHIR container** receives data and responds to queries.
-BREATHE and ET Node must be active.
+```bash
+docker-compose down
+docker-compose up -d
+```
 
 ---
 
@@ -178,8 +161,10 @@ BREATHE and ET Node must be active.
 
 Insert **UPLOAD CLIENT** credentials from Storage Node into the ET Node `.env`.
 
-### 4.2 Start ET Node Containers
+### 4.2 Start Dependencies
+Ensure **BREATHE** and **Storage Node** are currently running or wait until they are ready.
 
+### 4.3 Start ET Node Containers
 ```bash
 docker-compose up -d
 ```
@@ -190,14 +175,14 @@ Active containers should include:
 * `breathe-to-kafka` wrapper
 * `fhir-standardizer`
 
-### 4.3 Verify Data Transmission
+### 4.4 Verify Data Transmission
 
 Ensure:
 
-* BREATHE is running
-* Simulation is started
+* BREATHE simulation is started
 * Kafka logs show data being published
 * Standardizer logs show FHIR uploads
+* FHIR container receives data
 
 ---
 
@@ -209,7 +194,7 @@ Add **ANALYTICAL CLIENT** credentials to the DT Node `.env`.
 
 ### 5.2 Start Dependencies
 
-Start the **Storage Node** and **ET Node**, then wait until they are ready.
+Ensure **BREATHE**, **Storage Node** and **ET Node** are currently running or wait until they are ready.
 
 ### 5.3 Start DT Node
 
@@ -220,7 +205,7 @@ docker-compose up -d
 Expected behavior:
 
 * `resp-cap-assessment` outputs analytics in logs
-* Kafka → ZeroMQ translator runs (optional)
+* Kafka → ZeroMQ translator runs (currently not working - to fix!)
 
 ---
 
@@ -232,7 +217,7 @@ Add **VISUALIZATION CLIENT** credentials to the `.env`.
 
 ### 6.2 Start Dependencies
 
-Start **Storage Node** and **ET Node** and wait until they are initialized.
+Ensure **BREATHE**, **Storage Node**, **ET Node** and **DT Node** are currently running or wait until they are initialized.
 
 ### 6.3 Start Visualization Services
 
@@ -244,13 +229,6 @@ docker-compose up -d
 
 * [http://localhost:8083](http://localhost:8083)
 * [http://localhost:8082](http://localhost:8082)
-
-All components must be running:
-
-* BREATHE
-* ET Node
-* Storage Node
-* DT Node
 
 ---
 
