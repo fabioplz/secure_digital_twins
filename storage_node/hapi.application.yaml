@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: 'jdbc:postgresql://fhir-db:5432/hapi'
+    username: admin
+    password: admin
+    driverClassName: org.postgresql.Driver
+  jpa:
+    database.platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate.ddl.auto: update
+    properties:
+      hibernate.dialect: ca.uhn.fhir.jpa.model.dialect.HapiFhirPostgresDialect
+      hibernate.search.enabled: false
+hapi:
+  fhir:
+    custom-bean-packages: security
+    custom-interceptor-classes: security.Authentication

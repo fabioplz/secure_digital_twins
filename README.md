@@ -90,3 +90,6 @@ The framework has been evaluated in a case study for a **Digital Twin of a Mecha
 - The DT processes the data and provides feedback for treatment adjustments, which are visualized via a web interface.
 - The entire data pipeline demonstrates secure and compliant data flow from the physical sensor to the digital simulation.
 This case study validates the framework against the initial research questions on data standardization, interoperability, and comprehensive data security.
+
+## How to install
+[How to install](installation_guide.md)

@@ -1,0 +1,38 @@
+name: visualization-node
+services:
+
+  fhir-query-client:
+    build:
+      context: ./fhir-query-client
+    container_name: fhir-query-client
+    networks:
+      - visualization-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "8082:5000"
+    environment:
+      KEYCLOAK_BASE_URL: ${KEYCLOAK_BASE_URL}
+      REALM: ${REALM}
+      VISUALIZATION_CLIENT_ID: ${VISUALIZATION_CLIENT_ID}
+      VISUALIZATION_CLIENT_SECRET: ${VISUALIZATION_CLIENT_SECRET}
+      FHIR_SERVER: ${FHIR_SERVER}
+
+  fhir-analyzer-client:
+    build:
+      context: ./fhir-analyzer-client
+    container_name: fhir-analyzer-client
+    networks:
+      - visualization-network
+    ports:
+      - "8083:8501"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      KAFKA_BROKER: ${KAFKA_BROKER}
+      KAFKA_TOPIC: ${KAFKA_TOPIC}
+      KAFKA_USERNAME: ${KAFKA_USERNAME}
+      KAFKA_PASSWORD: ${KAFKA_PASSWORD}
+      
+networks:
+  visualization-network:

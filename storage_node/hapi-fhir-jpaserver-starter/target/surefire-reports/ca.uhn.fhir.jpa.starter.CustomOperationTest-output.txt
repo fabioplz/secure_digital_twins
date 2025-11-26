@@ -1,0 +1,49 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.6)
+
+2025-02-07T18:19:02.819+01:00  WARN 2086 --- [           main] ory$DuplicateJsonObjectContextCustomizer : 
+
+Found multiple occurrences of org.json.JSONObject on the class path:
+
+	jar:file:/Users/fabio/.m2/repository/org/json/json/20210307/json-20210307.jar!/org/json/JSONObject.class
+	jar:file:/Users/fabio/.m2/repository/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar!/org/json/JSONObject.class
+
+You may wish to exclude one of them to ensure predictable runtime behavior
+
+2025-02-07T18:19:02.896+01:00  INFO 2086 --- [           main] c.u.f.jpa.starter.CustomOperationTest    : Starting CustomOperationTest using Java 17.0.12 with PID 2086 (started by fabio in /Users/fabio/Desktop/Tesi/code/microservices/hapi-fhir-jpaserver-starter)
+2025-02-07T18:19:02.898+01:00  INFO 2086 --- [           main] c.u.f.jpa.starter.CustomOperationTest    : No active profile set, falling back to 1 default profile: "default"
+2025-02-07T18:19:05.919+01:00  INFO 2086 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-02-07T18:19:06.374+01:00  INFO 2086 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 434 ms. Found 53 JPA repository interfaces.
+2025-02-07T18:19:11.385+01:00  WARN 2086 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'ca.uhn.fhir.jpa.config.BeanPostProcessorConfig' of type [ca.uhn.fhir.jpa.config.BeanPostProcessorConfig$$SpringCGLIB$$0] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [persistenceExceptionTranslationPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2025-02-07T18:19:12.644+01:00  INFO 2086 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 0 (http)
+2025-02-07T18:19:12.699+01:00  INFO 2086 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-02-07T18:19:12.700+01:00  INFO 2086 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.24]
+2025-02-07T18:19:12.970+01:00  INFO 2086 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-02-07T18:19:12.973+01:00  INFO 2086 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 10009 ms
+2025-02-07T18:19:13.244+01:00  INFO 2086 --- [           main] ca.uhn.fhir.util.VersionUtil             : HAPI FHIR version 7.6.0 - Rev 90237f70ff
+2025-02-07T18:19:13.264+01:00  INFO 2086 --- [           main] ca.uhn.fhir.context.FhirContext          : Creating new FHIR context for FHIR version [R4]
+2025-02-07T18:19:13.350+01:00  INFO 2086 --- [           main] c.u.f.j.s.common.FhirServerConfigCommon  : Server configured to allow contains searches
+2025-02-07T18:19:13.351+01:00  INFO 2086 --- [           main] c.u.f.j.s.common.FhirServerConfigCommon  : Server configured to deny multiple deletes
+2025-02-07T18:19:13.351+01:00  INFO 2086 --- [           main] c.u.f.j.s.common.FhirServerConfigCommon  : Server configured to deny external references
+2025-02-07T18:19:13.351+01:00  INFO 2086 --- [           main] c.u.f.j.s.common.FhirServerConfigCommon  : Server configured to enable DAO scheduling
+2025-02-07T18:19:13.351+01:00  INFO 2086 --- [           main] c.u.f.j.s.common.FhirServerConfigCommon  : Server configured to disable delete expunges
+2025-02-07T18:19:13.351+01:00  INFO 2086 --- [           main] c.u.f.j.s.common.FhirServerConfigCommon  : Server configured to enable expunges
+2025-02-07T18:19:13.351+01:00  INFO 2086 --- [           main] c.u.f.j.s.common.FhirServerConfigCommon  : Server configured to allow overriding default search params
+2025-02-07T18:19:13.352+01:00  INFO 2086 --- [           main] c.u.f.j.s.common.FhirServerConfigCommon  : Server configured to disable auto-creating placeholder references
+2025-02-07T18:19:13.352+01:00  INFO 2086 --- [           main] c.u.f.j.s.common.FhirServerConfigCommon  : Server configured to auto-version references at paths []
+2025-02-07T18:19:13.400+01:00  INFO 2086 --- [           main] c.u.f.j.s.common.FhirServerConfigCommon  : Server configured to have a maximum fetch size of 'unlimited'
+2025-02-07T18:19:13.403+01:00  INFO 2086 --- [           main] c.u.f.j.s.common.FhirServerConfigCommon  : Server configured to cache search results for 60000 milliseconds
+2025-02-07T18:19:13.404+01:00  INFO 2086 --- [           main] c.u.f.j.s.common.FhirServerConfigCommon  : Server configured to use 'ALPHANUMERIC' Client ID Strategy
+2025-02-07T18:19:13.590+01:00  INFO 2086 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: HAPI_PU]
+2025-02-07T18:19:13.764+01:00  INFO 2086 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.10.Final
+2025-02-07T18:19:13.812+01:00  INFO 2086 --- [           main] .f.j.l.FilteringSqlLoggerImplContributor : Adding service: SqlStatementFilteringLogger
+2025-02-07T18:19:13.914+01:00  INFO 2086 --- [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-02-07T18:19:14.099+01:00  INFO 2086 --- [           main] o.h.e.boot.internal.EnversServiceImpl    : Envers integration enabled? : true
+2025-02-07T18:19:14.897+01:00  INFO 2086 --- [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-02-07T18:19:14.981+01:00  INFO 2086 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...

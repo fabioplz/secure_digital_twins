@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Observation Trend Visualization</title>
+</head>
+<body>
+    <h1>Observation Trend Visualization</h1>
+
+    <p><a href="{{ url_for('index') }}">Back to Query</a></p>
+
+    <form method="get" action="/visualization">
+        <label for="patient_id">Patient ID:</label>
+        <input type="text" id="patient_id" name="patient_id" value="{{ patient_id }}" required>
+
+        <label for="observation_code">Observation Code:</label>
+        <select id="observation_code" name="observation_code" required>
+            <option value="">Select a code...</option>
+            {% for label, code in observation_codes.items() %}
+                <option value="{{ code }}" {% if code == observation_code %}selected{% endif %}>
+                    {{ label }} ({{ code }})
+                </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Show Graph</button>
+    </form>
+
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% endif %}
+
+    {% if image_data %}
+        <h2>Trend Graph</h2>
+        <img src="data:image/png;base64,{{ image_data }}" alt="Observation Trend">
+    {% endif %}
+</body>
+</html>
