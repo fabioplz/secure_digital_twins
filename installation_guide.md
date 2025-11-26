@@ -205,7 +205,7 @@ docker-compose up -d
 Expected behavior:
 
 * `resp-cap-assessment` outputs analytics in logs
-* Kafka → ZeroMQ translator runs (currently not working - to fix!)
+* Kafka → ZeroMQ translator runs
 
 ---
 

@@ -9,53 +9,65 @@ from dotenv import load_dotenv
 import json
 
 # Load environment variables
+
 load_dotenv()
 
-# Console logging configuration
+# Logging configuration
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s"
 )
 
-# Get environment variables from .env
-KAFKA_BROKER = os.getenv('KAFKA_BROKER')
-KAFKA_TOPIC = os.getenv('KAFKA_TOPIC')
+# Environment variables
+
+KAFKA_BROKER = os.getenv("KAFKA_BROKER")
+KAFKA_TOPIC = os.getenv("KAFKA_TOPIC")
+KAFKA_USERNAME = os.getenv("KAFKA_USERNAME")
+KAFKA_PASSWORD = os.getenv("KAFKA_PASSWORD")
+KAFKA_SSL_TRUSTSTORE_PEM = "certs/client.truststore.pem"
 ZMQ_BIND_ADDRESS = "tcp://*:5561"
 
-# Kafka consumer configuration
+# Kafka consumer setup with SASL_SSL like the producer
+
 try:
     consumer = KafkaConsumer(
         KAFKA_TOPIC,
         bootstrap_servers=KAFKA_BROKER,
-        auto_offset_reset='earliest',
+        auto_offset_reset="earliest",
         enable_auto_commit=True,
-        value_deserializer=lambda m: m.decode('utf-8'),
-        security_protocol='PLAINTEXT'
+        value_deserializer=lambda m: m.decode("utf-8"),
+        security_protocol="SASL_SSL",
+        sasl_mechanism="PLAIN",
+        sasl_plain_username=KAFKA_USERNAME,
+        sasl_plain_password=KAFKA_PASSWORD,
+        ssl_cafile=KAFKA_SSL_TRUSTSTORE_PEM,
+        ssl_check_hostname=False
     )
 except Exception as e:
     logging.error(f"Error connecting to Kafka: {e}")
     sys.exit(1)
 
-# ZeroMQ publisher configuration
+# ZeroMQ publisher
 context = zmq.Context()
 socket = context.socket(zmq.PUB)
-socket.bind(ZMQ_BIND_ADDRESS)  # Bind PUB socket
+socket.bind(ZMQ_BIND_ADDRESS)
 
-# Flag for safe termination
+# Flag for clean shutdown
 running = True
 
 def handle_signal(sig, frame):
-    """Handles clean shutdown of the program on SIGINT (Ctrl+C)."""
+    """Handles clean shutdown of the program on SIGINT or SIGTERM."""
     global running
-    logging.info("Interruption received, shutting down the program...")
+    logging.info("Interruption received, shutting down...")
     running = False
     consumer.close()
     socket.close()
     context.term()
     sys.exit(0)
 
-# Intercept SIGINT (Ctrl+C)
 signal.signal(signal.SIGINT, handle_signal)
+signal.signal(signal.SIGTERM, handle_signal)
 
 logging.info("Kafka -> ZeroMQ bridge started...")
 
@@ -69,7 +81,7 @@ while running:
                 logging.info(json.dumps(parsed, indent=2))
             except json.JSONDecodeError:
                 logging.info(f"Raw message: {payload}")
-            time.sleep(0.01)  # Breve pausa per evitare flooding su ZMQ
+            time.sleep(0.01)  # Avoid flooding ZeroMQ
     except Exception as e:
         logging.error(f"Error during message processing: {e}")
         time.sleep(1)
