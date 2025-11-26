@@ -131,7 +131,7 @@ Create the following clients with settings below:
 * `upload-client`
 * `analytics-client`
 * `visualization-client`
-![Client Settings](client_setting.png)
+![Client Settings](client_settings.png)
 
 ### 3.3 Configure Realm Frontend URLs
 
